@@ -1,0 +1,132 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam class {
+  BackgroundColor #F5F5F5
+  BorderColor #333333
+  ArrowColor #0066CC
+}
+
+' ############## CLASSES PRINCIPAIS ##############
+class Paciente {
+  + idPaciente: Long
+  + nome: String
+  + cpf: String
+  + dataNascimento: Date
+  + tipoSanguineo: String
+  + alergias: List<String>
+  + prontuario: Prontuario
+  + cadastrar()
+  + atualizar()
+  + agendarConsulta()
+  + agendarExame()
+  + visualizarProntuario()
+}
+
+class ProfissionalSaude {
+  + idProfissional: Long
+  + nome: String
+  + crm: String
+  + especialidade: String
+  + agenda: List<DateTime>
+  + cadastrar()
+  + atualizar()
+  + gerenciarAgenda()
+  + atualizarProntuario()
+  + visualizarProntuario()
+  + emitirReceita()
+}
+
+class Administrador {
+  + idAdmin: Long
+  + nome: String
+  + gerenciarUnidades()
+}
+
+' ############## ENTIDADES DE ATENDIMENTO ##############
+class Consulta {
+  + idConsulta: Long
+  + idPaciente: Long
+  + idProfissional: Long
+  + idUnidade: Long
+  + dataHora: DateTime
+  + tipo: String
+  + status: String
+  + agendarConsulta()
+}
+
+class Prontuario {
+  + idProntuario: Long
+  + anotacoes: String
+  + prescricoes: List<Prescricao>
+  + exames: List<Exame>
+  + consultas: List<Consulta>
+  + cadastrar()
+  + atualizar()
+  + gerenciarExames()
+  + gerenciarPrescricoes()
+  + gerenciarConsultas()
+}
+
+class Prescricao {
+  + idPrescricao: Long
+  + medicamentos: List<String>
+  + validade: Date
+  + assinaturaDigital: String
+  + cadastrar()
+}
+
+class Exame {
+  + idExame: Long
+  + tipo: String
+  + resultado: String
+  + dataRealizacao: Date
+  + agendarExame()
+}
+
+' ############## ENTIDADES HOSPITALARES ##############
+class UnidadeSaude {
+  + idUnidade: Long
+  + nome: String
+  + tipo: String
+  + leitos: List<Leito>
+  + profissionaisSaude: List<ProfissionalSaude>
+  + pacientes: List<Paciente>
+  + estoque: List<ItemEstoque>
+  + gerenciarUnidadeSaude()
+  + cadastrar()
+  + atualizar()
+  + gerenciarEstoque()
+  + gerenciarLeitos()
+  + gerarRelatorios()
+  + gerenciarProfisisonalSaude()
+  + gerenciarPaciente()
+}
+
+class Leito {
+  + idLeito: Long
+  + tipo: String
+  + status: String
+  + cadastrar()
+  + atualizar()
+}
+
+class ItemEstoque {
+  + idItem: Long
+  + nome: String
+  + quantidade: Integer
+  + reposicaoMinima: Integer
+  + cadastrar()
+  + atualizar()
+}
+
+' ############## RELACIONAMENTOS ##############
+Paciente "1" *-- "1" Prontuario
+ProfissionalSaude "1" *-- "0..*" Prontuario
+Prontuario "1" *-- "0..*" Prescricao
+Prontuario "1" *-- "0..*" Exame
+Prontuario "1" *-- "0..*" Consulta
+Administrador "1" *-- "0..*" UnidadeSaude
+UnidadeSaude "1" *-- "0..*" Leito
+UnidadeSaude "1" *-- "0..*" ItemEstoque
+UnidadeSaude "1" *-- "0..*" ProfissionalSaude
+UnidadeSaude "1" *-- "0..*" Paciente

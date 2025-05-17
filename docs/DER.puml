@@ -1,0 +1,139 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam linetype ortho
+skinparam {
+  defaultFontSize 14
+  arrowFontSize 12
+  headerFontSize 16
+  padding 15
+}
+
+left to right direction
+
+' ##########################
+' ### ENTIDADES PRINCIPAIS
+' ##########################
+
+entity "ADMINISTRADOR" as administrador {
+  + id_admministrador [PK]
+  --
+  * nome: VARCHAR(100)
+  * username: VARCHAR(16) [UNIQUE]
+  * senha: TEXT
+}
+
+entity "PACIENTE" as paciente {
+  + id_paciente [PK]
+  + id_unidade [FK]
+  --
+  * nome: VARCHAR(100)
+  * cpf: VARCHAR(11) [UNIQUE]
+  * data_nascimento: DATE
+  tipo_sanguineo: VARCHAR(3)
+  alergias: TEXT
+}
+
+entity "PROFISSIONAL_SAÚDE" as profissional {
+  + id_profissional [PK]
+  + id_unidade [FK]
+  --
+  * nome: VARCHAR(100)
+  * crm: VARCHAR(20) [UNIQUE]
+  * especialidade: VARCHAR(50)
+  agenda: JSON
+}
+
+
+' ##########################
+' ### ENTIDADES CLÍNICAS
+' ##########################
+
+entity "PRONTUÁRIO" as prontuario {
+  + id_prontuario [PK]
+  + id_paciente [FK]
+  --
+  * anotacoes: TEXT
+}
+
+entity "PRESCRIÇÃO" as prescricao {
+  + id_prescricao [PK]
+  + id_prontuario [FK]
+  --
+  * medicamentos: JSON
+  * data_emissao: TIMESTAMP
+  * validade: DATE
+}
+
+entity "EXAME" as exame {
+  + id_exame [PK]
+  + id_prontuario [FK]
+  --
+  * tipo: VARCHAR(50)
+  resultado: TEXT
+  * data_realizacao: DATE
+}
+
+
+entity "CONSULTA" as consulta {
+  + id_consulta [PK]
+  + id_prontuario [FK]
+  --
+  * data_hora: TIMESTAMP
+  * tipo: VARCHAR(20)
+  * status: VARCHAR(15)
+}
+
+' #############################
+' ### ENTIDADES HOSPITALARES
+' #############################
+
+entity "UNIDADE_SAÚDE" as unidade {
+  + id_unidade [PK]
+  --
+  * nome: VARCHAR(100)
+  * tipo: VARCHAR(30)
+}
+
+entity "LEITO" as leito {
+  + id_leito [PK]
+  + id_unidade [FK]
+  --
+  * tipo: VARCHAR(20)
+  * status: VARCHAR(15)
+}
+
+entity "ESTOQUE" as estoque {
+  + id_item [PK]
+  + id_unidade [FK]
+  --
+  * nome: VARCHAR(100)
+  * quantidade: INTEGER
+  reposicao_minima: INTEGER
+}
+
+' ##########################
+' ### RELACIONAMENTOS
+' ##########################
+
+administrador ||--o{ unidade : "gerencia\n1:1"
+
+
+' --- PACIENTE ---
+paciente ||--o{ consulta : "0..N"
+paciente ||--|| prontuario : "1:1"
+
+' --- PROFISSIONAL ---
+profissional ||--o{ consulta : "0..N"
+profissional ||--o{ prontuario : "0..N"
+
+' --- UNIDADE ---
+unidade ||--o{ leito : "0..N"
+unidade ||--o{ estoque : "0..N"
+unidade ||--o{ profissional : "0..N"
+unidade ||--o{ paciente : "0..N"
+
+' --- PRONTUÁRIO ---
+prontuario ||--o{ prescricao : "0..N"
+prontuario ||--o{ exame : "0..N"
+prontuario ||--o{ consulta : "0..N"
+@enduml

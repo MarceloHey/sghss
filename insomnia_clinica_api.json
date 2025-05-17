@@ -1,0 +1,161 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2023-11-20T12:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2023.5.8",
+  "resources": [
+    {
+      "_id": "env_1",
+      "_type": "environment",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:3000",
+        "jwt_token": ""
+      }
+    },
+    {
+      "_id": "req_1",
+      "_type": "request",
+      "name": "Registrar Usuário",
+      "method": "POST",
+      "url": "{{ base_url }}/api/auth/register",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"email\": \"teste@clinica.com\",\n\t\"password\": \"senha123\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "description": "Endpoint para registrar um novo usuário"
+    },
+    {
+      "_id": "req_2",
+      "_type": "request",
+      "name": "Login",
+      "method": "POST",
+      "url": "{{ base_url }}/api/auth/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"email\": \"teste@clinica.com\",\n\t\"password\": \"senha123\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "description": "Endpoint para fazer login e obter o token JWT",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ jwt_token }}"
+      }
+    },
+    {
+      "_id": "req_3",
+      "_type": "request",
+      "name": "Criar Paciente",
+      "method": "POST",
+      "url": "{{ base_url }}/api/pacientes",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"name\": \"Fulano de Tal\",\n\t\"birthDate\": \"1990-01-01\",\n\t\"allergies\": [\"aspirina\"],\n\t\"medications\": [\"paracetamol\"]\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ jwt_token }}"
+        }
+      ],
+      "description": "Endpoint protegido para criar um paciente"
+    },
+    {
+      "_id": "req_4",
+      "_type": "request",
+      "name": "Listar Pacientes",
+      "method": "GET",
+      "url": "{{ base_url }}/api/pacientes",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ jwt_token }}"
+        }
+      ],
+      "description": "Endpoint protegido para listar todos os pacientes"
+    },
+    {
+      "_id": "req_5",
+      "_type": "request",
+      "name": "Buscar Paciente por ID",
+      "method": "GET",
+      "url": "{{ base_url }}/api/pacientes/:patient_id",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ jwt_token }}"
+        }
+      ],
+      "description": "Endpoint protegido para buscar um paciente específico",
+      "parameters": [
+        {
+          "name": "patient_id",
+          "value": "ID_DO_PACIENTE"
+        }
+      ]
+    },
+    {
+      "_id": "req_6",
+      "_type": "request",
+      "name": "Atualizar Paciente",
+      "method": "PUT",
+      "url": "{{ base_url }}/api/pacientes/:patient_id",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"name\": \"Nome Atualizado\",\n\t\"allergies\": [\"novo-alergeno\"]\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ jwt_token }}"
+        }
+      ],
+      "description": "Endpoint protegido para atualizar um paciente"
+    },
+    {
+      "_id": "req_7",
+      "_type": "request",
+      "name": "Deletar Paciente",
+      "method": "DELETE",
+      "url": "{{ base_url }}/api/pacientes/:patient_id",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ jwt_token }}"
+        }
+      ],
+      "description": "Endpoint protegido para deletar um paciente"
+    }
+  ]
+}

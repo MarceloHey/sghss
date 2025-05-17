@@ -1,0 +1,70 @@
+@startuml
+left to right direction
+skinparam backgroundColor #FFFFFF
+skinparam usecase {
+  BackgroundColor #F5F5F5
+  BorderColor #333333
+  ArrowColor #0066CC
+}
+
+' ### Atores Principais ###
+actor Paciente as "Paciente"
+actor "Profissional Saúde" as Medico 
+actor Administrador as "Administrador"
+
+' ### Módulo de Pacientes ###
+rectangle "Gestão de Pacientes" {
+  (RF-P01\nCadastrar Dados) as UC1
+  (RF-P02\nAgendar/Remarcar Consultas e Exames) as UC2
+  (RF-P03\nVisualizar Histórico) as UC3
+}
+
+' ### Módulo Profissional ###
+rectangle "Atendimento Médico" {
+  (RF-PS01\nGerenciar Agenda) as UC5
+  (RF-PS02\nAtualizar Prontuário) as UC6
+  (RF-PS03\nEmitir Receita Digital) as UC7
+  (RF-PS04\nVisualizar Exames) as UC8
+  (RF-PS05\nSolicitar Exames) as UC9
+}
+
+' ### Módulo Administrativo ###
+rectangle "Gestão Hospitalar" {
+  (RF-A01\nGerenciar Unidades) as UC10
+  (RF-A02\nMonitorar Leitos) as UC11
+  (RF-A03\nGerar Relatórios) as UC12
+  (RF-A04\nGerenciar Estoque) as UC13
+  (RF-A05\nGerenciar Pacientes) as UC15
+  (RF-A06\nGerenciar Profissionais de saúde) as UC16
+}
+
+' ### Módulo Telemedicina ###
+rectangle "Telemedicina" {
+  (RF-T01\nVideochamada Segura) as UC14
+}
+
+' ### Relacionamentos ###
+' Paciente
+Paciente --> UC1
+Paciente --> UC2
+Paciente --> UC3
+Paciente --> UC14
+
+' Profissional
+Medico --> UC3
+Medico --> UC9
+Medico --> UC5
+Medico --> UC6
+Medico --> UC7
+Medico --> UC14
+
+' Administrador
+Administrador --> UC10
+Administrador --> UC11
+Administrador --> UC12
+Administrador --> UC13
+Administrador --> UC15
+Administrador --> UC16
+
+
+@enduml
